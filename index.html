@@ -1,0 +1,726 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart CGPA Calculator</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #050b18, #102e59, #071426);
+    min-height: 100vh;
+    padding: 35px 15px;
+    color: #111827;
+}
+
+/* Main Container */
+
+.container {
+    max-width: 950px;
+    margin: auto;
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+}
+
+/* Header */
+
+.header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.header h1 {
+    font-size: 34px;
+    color: #123b70;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #123b70;
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Subject Cards */
+
+.subject-card {
+    background: #f4f8ff;
+    border: 1px solid #dbeafe;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 22px;
+    transition: 0.3s;
+}
+
+.subject-card:hover {
+    border-color: #2563eb;
+    box-shadow: 0 5px 15px rgba(37,99,235,0.08);
+}
+
+.subject-title {
+    color: #123b70;
+    font-size: 21px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #dbeafe;
+}
+
+.subject-name {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    font-size: 15px;
+    outline: none;
+    background: white;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 6px rgba(37,99,235,0.2);
+}
+
+/* Input Grid */
+
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.input-group {
+    margin-bottom: 5px;
+}
+
+/* Section Headings */
+
+.section-heading {
+    font-size: 14px;
+    color: #2563eb;
+    font-weight: bold;
+    margin: 18px 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Buttons */
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.calculate-btn {
+    background: #123b70;
+    color: white;
+}
+
+.calculate-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+.reset-btn {
+    background: #111827;
+    color: white;
+}
+
+.reset-btn:hover {
+    background: #374151;
+}
+
+/* Error Message */
+
+.error {
+    display: none;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 14px;
+    border-radius: 9px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Results */
+
+.results {
+    display: none;
+    margin-top: 35px;
+    padding: 28px;
+    background: #eff6ff;
+    border-radius: 15px;
+    border: 1px solid #bfdbfe;
+    border-left: 6px solid #2563eb;
+}
+
+.results h2 {
+    text-align: center;
+    color: #123b70;
+    font-size: 25px;
+    margin-bottom: 25px;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5px;
+    border-bottom: 1px solid #cbd5e1;
+    gap: 15px;
+}
+
+.result-row:last-child {
+    border-bottom: none;
+}
+
+.result-row span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.result-row strong {
+    color: #1d4ed8;
+    font-size: 17px;
+    text-align: right;
+}
+
+.highlight {
+    background: white;
+    padding: 17px;
+    margin-top: 12px;
+    border-radius: 10px;
+}
+
+.highlight strong {
+    font-size: 23px;
+}
+
+.result-note {
+    text-align: center;
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 18px;
+    line-height: 1.6;
+}
+
+/* Footer */
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* Mobile Responsive */
+
+@media(max-width: 600px) {
+
+    .container {
+        padding: 20px;
+    }
+
+    .header h1 {
+        font-size: 27px;
+    }
+
+    .input-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .subject-card {
+        padding: 18px;
+    }
+
+    .result-row span {
+        font-size: 13px;
+    }
+
+    .result-row strong {
+        font-size: 15px;
+    }
+
+    .highlight strong {
+        font-size: 19px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <span class="badge">SMART ACADEMIC TOOL</span>
+
+        <h1>CGPA Calculator</h1>
+
+        <p>
+            Calculate your academic performance easily.
+            Enter your subject-wise internal and theory marks
+            to calculate your CGPA.
+        </p>
+
+    </div>
+
+
+    <!-- Subject Cards Generated Here -->
+
+    <div id="subjectsContainer"></div>
+
+
+    <!-- Buttons -->
+
+    <div class="button-group">
+
+        <button class="calculate-btn" onclick="calculateCGPA()">
+            Calculate CGPA
+        </button>
+
+        <button class="reset-btn" onclick="resetCalculator()">
+            Reset All
+        </button>
+
+    </div>
+
+
+    <!-- Error Message -->
+
+    <div class="error" id="error"></div>
+
+
+    <!-- Results Section -->
+
+    <div class="results" id="results">
+
+        <h2>Your Academic Results</h2>
+
+        <div class="result-row">
+            <span>Total Internal Marks</span>
+            <strong id="internalResult">0</strong>
+        </div>
+
+        <div class="result-row">
+            <span>Total Theory Marks</span>
+            <strong id="theoryResult">0</strong>
+        </div>
+
+        <div class="result-row">
+            <span>Total Obtained Marks</span>
+            <strong id="obtainedResult">0</strong>
+        </div>
+
+        <div class="result-row">
+            <span>Total Maximum Marks</span>
+            <strong id="maximumResult">0</strong>
+        </div>
+
+        <div class="result-row">
+            <span>Overall Percentage</span>
+            <strong id="percentageResult">0%</strong>
+        </div>
+
+        <div class="result-row highlight">
+            <span>CGPA (10-Point Scale)</span>
+            <strong id="cgpa10">0.00 / 10</strong>
+        </div>
+
+        <div class="result-row highlight">
+            <span>CGPA (4-Point Scale)</span>
+            <strong id="cgpa4">0.00 / 4</strong>
+        </div>
+
+        <p class="result-note">
+            CGPA is calculated using overall percentage.
+            10-point to 4-point conversion uses a proportional
+            conversion formula.
+        </p>
+
+    </div>
+
+
+    <!-- Footer -->
+
+    <div class="footer">
+        © 2026 Smart CGPA Calculator | Designed with HTML, CSS & JavaScript
+    </div>
+
+</div>
+
+
+<script>
+
+// Generate Five Subject Cards
+
+const subjectsContainer =
+document.getElementById("subjectsContainer");
+
+
+for (let i = 1; i <= 5; i++) {
+
+    subjectsContainer.innerHTML += `
+
+        <div class="subject-card">
+
+            <h2 class="subject-title">
+                Subject ${i}
+            </h2>
+
+            <!-- Subject Name -->
+
+            <div class="subject-name">
+
+                <label>Subject Name</label>
+
+                <input
+                    type="text"
+                    id="subjectName${i}"
+                    placeholder="Enter subject name"
+                >
+
+            </div>
+
+
+            <!-- Internal Marks -->
+
+            <div class="section-heading">
+                Internal Assessment
+            </div>
+
+            <div class="input-grid">
+
+                <div class="input-group">
+
+                    <label>Internal Marks Obtained</label>
+
+                    <input
+                        type="number"
+                        id="intObt${i}"
+                        placeholder="Obtained marks"
+                        min="0"
+                        step="any"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Internal Maximum Marks</label>
+
+                    <input
+                        type="number"
+                        id="intMax${i}"
+                        placeholder="Maximum marks"
+                        min="0.01"
+                        step="any"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Theory Marks -->
+
+            <div class="section-heading">
+                Theory Examination
+            </div>
+
+            <div class="input-grid">
+
+                <div class="input-group">
+
+                    <label>Theory Marks Obtained</label>
+
+                    <input
+                        type="number"
+                        id="theoryObt${i}"
+                        placeholder="Obtained marks"
+                        min="0"
+                        step="any"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Theory Maximum Marks</label>
+
+                    <input
+                        type="number"
+                        id="theoryMax${i}"
+                        placeholder="Maximum marks"
+                        min="0.01"
+                        step="any"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+// Calculation Function
+
+function calculateCGPA() {
+
+    let totalInternal = 0;
+    let totalTheory = 0;
+
+    let maximumInternal = 0;
+    let maximumTheory = 0;
+
+    const error = document.getElementById("error");
+    const results = document.getElementById("results");
+
+    error.style.display = "none";
+    results.style.display = "none";
+
+
+    // Validate and Collect Marks
+
+    for (let i = 1; i <= 5; i++) {
+
+        let subjectName =
+        document.getElementById("subjectName" + i).value.trim();
+
+        let intObt =
+        document.getElementById("intObt" + i).value;
+
+        let intMax =
+        document.getElementById("intMax" + i).value;
+
+        let theoryObt =
+        document.getElementById("theoryObt" + i).value;
+
+        let theoryMax =
+        document.getElementById("theoryMax" + i).value;
+
+
+        // Empty Field Validation
+
+        if (
+            subjectName === "" ||
+            intObt.trim() === "" ||
+            intMax.trim() === "" ||
+            theoryObt.trim() === "" ||
+            theoryMax.trim() === ""
+        ) {
+
+            showError(
+                "Please complete all fields for Subject " + i
+            );
+
+            return;
+        }
+
+
+        // Convert Values to Numbers
+
+        intObt = Number(intObt);
+        intMax = Number(intMax);
+
+        theoryObt = Number(theoryObt);
+        theoryMax = Number(theoryMax);
+
+
+        // Invalid Marks Validation
+
+        if (
+            ![intObt, intMax, theoryObt, theoryMax].every(Number.isFinite) ||
+            intObt < 0 ||
+            intMax <= 0 ||
+            theoryObt < 0 ||
+            theoryMax <= 0 ||
+            intObt > intMax ||
+            theoryObt > theoryMax
+        ) {
+
+            showError(
+                "Invalid marks entered in " + subjectName +
+                ". Please check your marks."
+            );
+
+            return;
+        }
+
+
+        // Add Marks
+
+        totalInternal += intObt;
+        maximumInternal += intMax;
+
+        totalTheory += theoryObt;
+        maximumTheory += theoryMax;
+
+    }
+
+
+    // Final Calculations
+
+    let totalObtained = totalInternal + totalTheory;
+
+    let totalMaximum = maximumInternal + maximumTheory;
+
+    let percentage =
+    (totalObtained / totalMaximum) * 100;
+
+    let cgpa10 = percentage / 10;
+
+    let cgpa4 = cgpa10 * 0.4;
+
+
+    // Display Results
+
+    document.getElementById("internalResult").innerText =
+    totalInternal.toFixed(2) + " / " +
+    maximumInternal.toFixed(2);
+
+
+    document.getElementById("theoryResult").innerText =
+    totalTheory.toFixed(2) + " / " +
+    maximumTheory.toFixed(2);
+
+
+    document.getElementById("obtainedResult").innerText =
+    totalObtained.toFixed(2);
+
+
+    document.getElementById("maximumResult").innerText =
+    totalMaximum.toFixed(2);
+
+
+    document.getElementById("percentageResult").innerText =
+    percentage.toFixed(2) + "%";
+
+
+    document.getElementById("cgpa10").innerText =
+    cgpa10.toFixed(2) + " / 10";
+
+
+    document.getElementById("cgpa4").innerText =
+    cgpa4.toFixed(2) + " / 4";
+
+
+    // Show Result
+
+    results.style.display = "block";
+
+    results.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+// Error Function
+
+function showError(message) {
+
+    const error = document.getElementById("error");
+
+    error.innerText = message;
+
+    error.style.display = "block";
+
+    document.getElementById("results").style.display = "none";
+
+}
+
+
+// Reset Function
+
+function resetCalculator() {
+
+    for (let i = 1; i <= 5; i++) {
+
+        document.getElementById("subjectName" + i).value = "";
+
+        document.getElementById("intObt" + i).value = "";
+
+        document.getElementById("intMax" + i).value = "";
+
+        document.getElementById("theoryObt" + i).value = "";
+
+        document.getElementById("theoryMax" + i).value = "";
+
+    }
+
+    document.getElementById("results").style.display = "none";
+
+    document.getElementById("error").style.display = "none";
+
+}
+
+</script>
+
+</body>
+</html>
+```
